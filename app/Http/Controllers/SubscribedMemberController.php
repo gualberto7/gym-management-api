@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
@@ -20,9 +21,9 @@ class SubscribedMemberController extends Controller
             ->join('members', 'subscriptions.member_id', '=', 'members.id')
             ->join('memberships', 'subscriptions.membership_id', '=', 'memberships.id')
             ->select('members.*', 'memberships.name AS membership', 'subscriptions.start_date', 'subscriptions.end_date')
-            ->get();
+            ->paginate();
 
-        return response()->json($members);
+        return SubscriptionResource::collection($members);
     }
 
     public function store(Request $request)

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Resources\SubscriptionResource;
 use App\Models\Gym;
 use App\Models\User;
 use App\Models\Member;
@@ -42,8 +43,16 @@ test('owners and admins can request subscribed members', function () {
     $response = $this->actingAs($user)->getJson(route('api.subscribed-members.index'));
 
     $response->assertStatus(200);
-    $response->assertJsonCount(1);
-    $response->assertJsonFragment([
-        'id' => $member->id,
+    $response->assertJsonStructure([
+        'data' => [
+            '*' => [
+                'id',
+                'member',
+                'email',
+                'membership',
+                'start_date',
+                'end_date',
+            ],
+        ],
     ]);
 });
