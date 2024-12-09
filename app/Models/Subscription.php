@@ -11,4 +11,19 @@ class Subscription extends Model
     use HasFactory;
 
     protected $guarded = [];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class);
+    }
+
+    public function gym()
+    {
+        return $this->belongsTo(Gym::class);
+    }
+
+    public function membership()
+    {
+        return $this->belongsTo(Membership::class);
+    }
 }

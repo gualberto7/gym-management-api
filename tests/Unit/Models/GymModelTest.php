@@ -3,6 +3,7 @@
 use App\Models\Gym;
 use App\Models\User;
 use App\Models\Membership;
+use App\Models\Subscription;
 
 test('gym belongs to a user', function () {
     $user = User::factory()->create();
@@ -16,4 +17,11 @@ test('gym has many memberships', function () {
     Membership::factory(2)->create(['gym_id' => $gym->id]);
 
     expect($gym->memberships->first())->toBeInstanceOf(Membership::class);
+});
+
+test('gym has many subscriptions', function () {
+    $gym = Gym::factory()->create();
+    $subscription = Subscription::factory()->create(['gym_id' => $gym->id]);
+
+    expect($gym->subscriptions->first()->is($subscription))->toBeTrue();
 });
