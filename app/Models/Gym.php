@@ -16,4 +16,9 @@ class Gym extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    function memberships()
+    {
+        return $this->hasMany(Membership::class);
+    }
 }
