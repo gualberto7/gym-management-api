@@ -28,5 +28,12 @@ class SubscribedMemberController extends Controller
 
     public function store(Request $request)
     {
+        if (Gate::denies('create', Subscription::class)) {
+            abort(403);
+        }
+
+        $subscription = Subscription::create($request->all());
+
+        return new SubscriptionResource($subscription);
     }
 }

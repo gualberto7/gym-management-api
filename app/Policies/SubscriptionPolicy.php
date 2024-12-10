@@ -29,7 +29,7 @@ class SubscriptionPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        return $user->role === 'owner' || $user->role === 'admin';
     }
 
     /**
