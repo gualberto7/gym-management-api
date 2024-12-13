@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GymController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
 use App\Http\Controllers\SubscribedMemberController;
@@ -29,4 +30,10 @@ Route::controller(MembershipController::class)
     ->group(function () {
         Route::get('/memberships', 'index')->name('api.memberships.index');
         Route::post('/memberships', 'store')->name('api.memberships.store');
+    });
+
+Route::controller(GymController::class)
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::get('/gyms', 'index')->name('api.gyms.index');
     });

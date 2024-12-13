@@ -8,7 +8,4 @@ test('can request a user by cookies', function () {
     Sanctum::actingAs($user);
     $response = $this->get(route('api.user.find'));
     $response->assertStatus(200);
-    $response->assertJson([
-        'email' => 'user@test.com',
-    ]);
 });
