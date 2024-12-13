@@ -10,12 +10,7 @@ class MemberController extends Controller
 {
     public function index(Request $request)
     {
-        $members = Member::allowedSorts(['name'])->paginate(
-            $perPage = $request->input('page.size', 15),
-            $columns = ['*'],
-            $pageName = 'page[number]',
-            $page = $request->input('page.number', 1)
-        )->appends($request->only('sort', 'page.size'));
+        $members = Member::allowedSorts(['name'])->jsonPaginate();
         return response()->json($members, 200);
     }
 

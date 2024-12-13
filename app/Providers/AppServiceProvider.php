@@ -43,5 +43,14 @@ class AppServiceProvider extends ServiceProvider
                 return $query->orderBy($sortField, $sortDirection);
             });
         });
+
+        Builder::macro('jsonPaginate', function () {
+            return $this->paginate(
+                $perPage = request()->input('page.size', 15),
+                $columns = ['*'],
+                $pageName = 'page[number]',
+                $page = request()->input('page.number', 1)
+            )->appends(request()->only('sort', 'page.size'));
+        });
     }
 }
