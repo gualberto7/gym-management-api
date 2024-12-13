@@ -16,5 +16,11 @@ test('authenticated users can request members', function () {
     $response = $this->actingAs($user)->getJson(route('api.members.index'));
 
     $response->assertStatus(200);
-    $response->assertJson($members->toArray());
+    $response->assertJson([
+        'data' => [
+            ['name' => $members[0]->name],
+            ['name' => $members[1]->name],
+            ['name' => $members[2]->name],
+        ]
+    ]);
 });
