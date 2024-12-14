@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Builder;
 class JsonApiQueryBuilder
 {
-    public function allowedSorts(): Closure
+    public function applySorts(): Closure
     {
         /** @var Builder $this */
         return function ($allowedSorts) {
@@ -29,6 +29,21 @@ class JsonApiQueryBuilder
         };
     }
 
+    public function applyFilters(): Closure
+    {
+        /** @var Builder $this */
+        return function ($allowedFilters) {
+            foreach (request('filter', []) as $filter => $value) {
+                abort_unless(in_array($filter, $allowedFilters), 400, 'Invalid filter field');
+
+                $this->hasNamedScope($filter)
+                    ? $this->{$filter}($value)
+                    : $this->where($filter, 'LIKE', "%$value%");
+            }
+            return $this;
+        };
+    }
+
     public function jsonPaginate(): Closure
     {
         return function () {
@@ -38,7 +53,7 @@ class JsonApiQueryBuilder
                 $columns = ['*'],
                 $pageName = 'page[number]',
                 $page = request()->input('page.number', 1)
-            )->appends(request()->only('sort', 'page.size'));
+            )->appends(request()->only('sort', 'filter', 'page.size'));
         };
     }
 }
