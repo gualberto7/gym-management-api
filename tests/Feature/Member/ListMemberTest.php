@@ -24,3 +24,15 @@ test('authenticated users can request members', function () {
         ]
     ]);
 });
+
+test('authenticated users find one member by CI', function () {
+    $user = User::factory()->create();
+    Member::factory(2)->create();
+    $member = Member::factory()->create(['ci' => '1234567']);
+
+    $response = $this->actingAs($user)
+        ->getJson(route('api.members.find', ['ci' => $member->ci]));
+
+    $response->assertStatus(200);
+    $response->assertJson(['name' => $member->name]);
+});

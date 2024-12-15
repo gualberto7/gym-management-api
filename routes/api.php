@@ -22,6 +22,7 @@ Route::controller(MemberController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::get('/members', 'index')->name('api.members.index');
+        Route::get('/members/ci/{ci}', 'findOneByCi')->name('api.members.find');
         Route::post('/members', 'store')->name('api.members.store');
     });
 

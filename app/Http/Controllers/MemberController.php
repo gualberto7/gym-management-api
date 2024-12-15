@@ -14,6 +14,12 @@ class MemberController extends Controller
         return response()->json($members, 200);
     }
 
+    public function findOneByCi($ci)
+    {
+        $member = Member::where('ci', $ci)->firstOrFail();
+        return response()->json($member, 200);
+    }
+
     public function store(Request $request)
     {
         $member = Member::create($request->all());
