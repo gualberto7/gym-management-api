@@ -56,3 +56,37 @@ test('owner can request subscribed members', function () {
         ],
     ]);
 });
+
+test('verify subscription members is paginated', function () {
+    $data = $this->createUserGymMembershipAndSubscription('owner');
+
+    $response = $this->actingAs($data['user'])
+        ->getJson(route('api.subscribed-members.index'));
+
+    $response->assertStatus(200);
+    $response->assertJsonStructure([
+        'data',
+        'links' => [
+            'first',
+            'last',
+            'prev',
+            'next',
+        ],
+        'meta' => [
+            'current_page',
+            'from',
+            'last_page',
+            'path',
+            'per_page',
+            'to',
+            'total',
+            'links' => [
+                '*' => [
+                    'url',
+                    'label',
+                    'active',
+                ],
+            ],
+        ],
+    ]);
+});
