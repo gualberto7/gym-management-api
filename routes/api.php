@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ChenkisController;
 use App\Http\Controllers\GymController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
@@ -24,6 +25,12 @@ Route::controller(MemberController::class)
         Route::get('/members', 'index')->name('api.members.index');
         Route::get('/members/ci/{ci}', 'findOneByCi')->name('api.members.find');
         Route::post('/members', 'store')->name('api.members.store');
+    });
+
+Route::controller(ChenkisController::class)
+    ->middleware('auth:sanctum')
+    ->group(function () {
+        Route::post('/chenkis', 'store')->name('api.chenkis.store');
     });
 
 Route::controller(MembershipController::class)
