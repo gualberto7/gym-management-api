@@ -15,4 +15,9 @@ class Chenkis extends Model
         'gym_id',
         'registred_by',
     ];
+
+    public function member()
+    {
+        return $this->belongsTo(Member::class);
+    }
 }
