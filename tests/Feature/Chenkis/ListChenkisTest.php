@@ -44,3 +44,15 @@ test("verify chenkis belogs to owner's / admin's gyms", function () {
     $response->assertStatus(200);
     $response->assertJsonCount(1);
 });
+
+test('verify chenkis response data structure', function () {
+    $data = $this->createUserGymMembershipAndSubscription('owner');
+    $chenkis = Chenkis::factory()->create(['gym_id' => $data['gym']->id, 'member_id' => $data['member']->id]);
+
+    $response = $this->actingAs($data['user'])
+        ->getJson(route('api.chenkis.index'));
+
+    $response->assertJsonStructure([
+        '*' => ['id', 'member_name', 'member_phone', 'created_at', 'created_by'],
+    ]);
+});

@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ChenkisResource;
 use App\Models\Chenkis;
-use App\Models\Gym;
-use App\Models\User;
 use Illuminate\Http\Request;
 
 class ChenkisController extends Controller
@@ -17,8 +16,10 @@ class ChenkisController extends Controller
         if (!$gym) {
             return response()->json(['error' => 'No gym associated with the user'], 404);
         }
-        $chenkis = Chenkis::where('gym_id', $gym->id)->get();
-        return response()->json($chenkis, 200);
+        $chenkis = Chenkis::where('gym_id', $gym->id)->paginate();
+
+        $data = ChenkisResource::collection($chenkis);
+        return response()->json($data, 200);
     }
 
     public function store(Request $request)
