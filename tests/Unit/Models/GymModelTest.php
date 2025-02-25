@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Chenkis;
 use App\Models\Gym;
 use App\Models\User;
 use App\Models\Membership;
@@ -24,4 +25,11 @@ test('gym has many subscriptions', function () {
     $subscription = Subscription::factory()->create(['gym_id' => $gym->id]);
 
     expect($gym->subscriptions->first()->is($subscription))->toBeTrue();
+});
+
+test('gym has many chenkis', function () {
+    $gym = Gym::factory()->create();
+    $chenkis = Chenkis::factory(2)->create(['gym_id' => $gym->id]);
+
+    expect($gym->chenkis->first())->toBeInstanceOf(Chenkis::class);
 });

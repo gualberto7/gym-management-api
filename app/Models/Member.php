@@ -17,4 +17,9 @@ class Member extends Model
     {
         return $this->hasMany(Subscription::class);
     }
+
+    public function chenkis()
+    {
+        return $this->hasMany(Chenkis::class);
+    }
 }

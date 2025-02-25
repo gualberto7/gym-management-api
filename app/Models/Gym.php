@@ -26,4 +26,9 @@ class Gym extends Model
     {
         return $this->hasMany(Subscription::class);
     }
+
+    function chenkis()
+    {
+        return $this->hasMany(Chenkis::class);
+    }
 }
