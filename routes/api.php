@@ -30,6 +30,7 @@ Route::controller(MemberController::class)
 Route::controller(ChenkisController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
+        Route::get('/chenkis', 'index')->name('api.chenkis.index');
         Route::post('/chenkis', 'store')->name('api.chenkis.store');
     });
 
