@@ -41,7 +41,15 @@ class SubscribedMemberController extends Controller
             abort(404, 'Este usuario no tiene una subscripción');
         }
 
-        return new SubscriptionResource($subscription);
+        return response()->json([
+            'id' => $subscription->id,
+            'email' => $member->email,
+            'member' => $member->name,
+            'phone' => $member->phone,
+            'membership' => $subscription->membership->name,
+            'start_date' => $subscription->start_date,
+            'end_date' => $subscription->end_date,
+        ]);
     }
 
     public function store(Request $request)
