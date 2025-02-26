@@ -16,6 +16,7 @@ Route::controller(SubscribedMemberController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::get('/subscribed-members', 'index')->name('api.subscribed-members.index');
+        Route::get('/subscribed-members/{ci}', 'show')->name('api.subscribed-members.show');
         Route::post('/subscribed-members', 'store')->name('api.subscribed-members.store');
     });
 
