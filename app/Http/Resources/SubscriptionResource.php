@@ -16,12 +16,18 @@ class SubscriptionResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'email' => $this->email,
-            'member' => $this->name,
-            'phone' => $this->phone,
-            'membership' => $this->membership,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'member' => [
+                'id' => $this->member->id,
+                'name' => $this->member->name,
+                'email' => $this->member->email,
+                'phone' => $this->member->phone,
+            ],
+            'membership' => [
+                'id' => $this->membership->id,
+                'name' => $this->membership->name,
+            ],
         ];
     }
 }

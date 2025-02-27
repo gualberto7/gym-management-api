@@ -18,13 +18,11 @@ class SubscribedMemberController extends Controller
 
         $gym = auth()->user()->gyms->first();
 
-        $members = $gym->subscriptions()
-            ->join('members', 'subscriptions.member_id', '=', 'members.id')
-            ->join('memberships', 'subscriptions.membership_id', '=', 'memberships.id')
-            ->select('members.*', 'memberships.name AS membership', 'subscriptions.start_date', 'subscriptions.end_date')
-            ->paginate();
+        $subscriptions = Subscription::with(['member', 'membership'])
+            ->where('gym_id', $gym->id)
+            ->jsonPaginate();
 
-        return SubscriptionResource::collection($members);
+        return SubscriptionResource::collection($subscriptions);
     }
 
     public function show($ci)
@@ -36,20 +34,15 @@ class SubscribedMemberController extends Controller
             abort(404, 'No hay registros para CI: ' . $ci);
         }
 
-        $subscription = $member->subscriptions()->first();
+        $subscription = Subscription::with(['member', 'membership'])
+            ->where('member_id', $member->id)
+            ->first();
+
         if (!$subscription) {
             abort(404, 'Este usuario no tiene una subscripción');
         }
 
-        return response()->json([
-            'id' => $subscription->id,
-            'email' => $member->email,
-            'member' => $member->name,
-            'phone' => $member->phone,
-            'membership' => $subscription->membership->name,
-            'start_date' => $subscription->start_date,
-            'end_date' => $subscription->end_date,
-        ]);
+        return new SubscriptionResource($subscription);
     }
 
     public function store(Request $request)
