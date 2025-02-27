@@ -33,13 +33,21 @@ test('verify the response structure when finding a subscription', function () {
         ->getJson(route('api.subscribed-members.show', $data['member']->ci));
 
     $response->assertJsonStructure([
-        'id',
-        'member',
-        'email',
-        'phone',
-        'membership',
-        'start_date',
-        'end_date',
+        'data' => [
+            'id',
+            'start_date',
+            'end_date',
+            'member' => [
+                'id',
+                'name',
+                'email',
+                'phone',
+            ],
+            'membership' => [
+                'id',
+                'name',
+            ],
+        ],
     ]);
 });
 
