@@ -42,7 +42,7 @@ test("verify chenkis belogs to owner's / admin's gyms", function () {
         ->getJson(route('api.chenkis.index'));
 
     $response->assertStatus(200);
-    $response->assertJsonCount(1);
+    $response->assertJsonCount(1, 'data');
 });
 
 test('verify chenkis response data structure', function () {
@@ -53,6 +53,14 @@ test('verify chenkis response data structure', function () {
         ->getJson(route('api.chenkis.index'));
 
     $response->assertJsonStructure([
-        '*' => ['id', 'member_name', 'member_phone', 'created_at', 'created_by'],
+        'data' => [
+            '*' => [
+                'id',
+                'member_name',
+                'member_phone',
+                'created_at',
+                'created_by',
+            ],
+        ],
     ]);
 });
