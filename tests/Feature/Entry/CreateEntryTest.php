@@ -4,46 +4,46 @@ use App\Models\Gym;
 use App\Models\Member;
 use App\Models\User;
 
-test('guest users cannot add chenkis', function () {
-    $response = $this->postJson(route('api.chenkis.store'), []);
+test('guest users cannot add entries', function () {
+    $response = $this->postJson(route('api.entries.store'), []);
 
     $response->assertStatus(401);
 });
 
-test('admins users can add chenkis', function () {
+test('admins users can add entries', function () {
     $user = User::factory()->create(['role' => 'admin']);
     $gym = Gym::factory()->create(['user_id' => $user->id]);
     $member = Member::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('api.chenkis.store'), [
+        ->postJson(route('api.entries.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
             'created_by' => $user->name,
         ]);
 
     $response->assertStatus(201);
-    $this->assertDatabaseHas('chenkis', [
+    $this->assertDatabaseHas('entries', [
         'member_id' => $member->id,
         'gym_id' => $gym->id,
         'created_by' => $user->name,
     ]);
 });
 
-test('owners users can add chenkis', function () {
+test('owners users can add entries', function () {
     $user = User::factory()->create(['role' => 'owner']);
     $gym = Gym::factory()->create(['user_id' => $user->id]);
     $member = Member::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('api.chenkis.store'), [
+        ->postJson(route('api.entries.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
             'created_by' => $user->name,
         ]);
 
     $response->assertStatus(201);
-    $this->assertDatabaseHas('chenkis', [
+    $this->assertDatabaseHas('entries', [
         'member_id' => $member->id,
         'gym_id' => $gym->id,
         'created_by' => $user->name,
@@ -57,7 +57,7 @@ test('member_id is required', function () {
     $gym = Gym::factory()->create(['user_id' => $user->id]);
 
     $response = $this->actingAs($user)
-        ->postJson(route('api.chenkis.store'), [
+        ->postJson(route('api.entries.store'), [
             'gym_id' => $gym->id,
             'created_by' => $user->name,
         ]);
@@ -71,7 +71,7 @@ test('gym_id is required', function () {
     $member = Member::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('api.chenkis.store'), [
+        ->postJson(route('api.entries.store'), [
             'member_id' => $member->id,
             'created_by' => $user->name,
         ]);
@@ -86,7 +86,7 @@ test('created_by is required', function () {
     $member = Member::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('api.chenkis.store'), [
+        ->postJson(route('api.entries.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
         ]);
@@ -101,7 +101,7 @@ test('created_by must be string', function () {
     $member = Member::factory()->create();
 
     $response = $this->actingAs($user)
-        ->postJson(route('api.chenkis.store'), [
+        ->postJson(route('api.entries.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
             'created_by' => 123,

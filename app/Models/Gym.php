@@ -30,8 +30,8 @@ class Gym extends Model
         return $this->hasMany(Subscription::class);
     }
 
-    function chenkis(): HasMany
+    function entries(): HasMany
     {
-        return $this->hasMany(Chenkis::class);
+        return $this->hasMany(Entry::class);
     }
 }

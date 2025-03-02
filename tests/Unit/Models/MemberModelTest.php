@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\Member;
-use App\Models\Chenkis;
+use App\Models\Entry;
 use App\Models\Subscription;
 
 test('member has many subscription', function () {
@@ -11,9 +11,9 @@ test('member has many subscription', function () {
     $this->assertInstanceOf(Subscription::class, $member->subscriptions[0]);
 });
 
-test('member has many chenkis', function () {
+test('member has many entries', function () {
     $member = Member::factory()->create();
-    $chenkis = Chenkis::factory(2)->create(['member_id' => $member->id]);
+    Entry::factory(2)->create(['member_id' => $member->id]);
 
-    $this->assertInstanceOf(Chenkis::class, $member->chenkis[0]);
+    $this->assertInstanceOf(Entry::class, $member->entries[0]);
 });

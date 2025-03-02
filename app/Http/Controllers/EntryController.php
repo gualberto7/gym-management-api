@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\ChenkisResource;
-use App\Models\Chenkis;
+use App\Http\Resources\EntryResource;
+use App\Models\Entry;
 use Illuminate\Http\Request;
 
-class ChenkisController extends Controller
+class EntryController extends Controller
 {
 
     public function index()
@@ -16,9 +16,9 @@ class ChenkisController extends Controller
         if (!$gym) {
             return response()->json(['error' => 'No gym associated with the user'], 404);
         }
-        $chenkis = Chenkis::where('gym_id', $gym->id)->jsonPaginate();
+        $entries = Entry::where('gym_id', $gym->id)->jsonPaginate();
 
-        return ChenkisResource::collection($chenkis);
+        return EntryResource::collection($entries);
     }
 
     public function store(Request $request)
@@ -29,12 +29,12 @@ class ChenkisController extends Controller
             'created_by' => 'required|string',
         ]);
 
-        $chenki = Chenkis::create([
+        $entry = Entry::create([
             'member_id' => $request->member_id,
             'gym_id' => $request->gym_id,
             'created_by' => $request->created_by,
         ]);
 
-        return response()->json($chenki, 201);
+        return response()->json($entry, 201);
     }
 }

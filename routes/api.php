@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ChenkisController;
+use App\Http\Controllers\EntryController;
 use App\Http\Controllers\GymController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MembershipController;
@@ -28,11 +28,11 @@ Route::controller(MemberController::class)
         Route::post('/members', 'store')->name('api.members.store');
     });
 
-Route::controller(ChenkisController::class)
+Route::controller(EntryController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
-        Route::get('/chenkis', 'index')->name('api.chenkis.index');
-        Route::post('/chenkis', 'store')->name('api.chenkis.store');
+        Route::get('/entries', 'index')->name('api.entries.index');
+        Route::post('/entries', 'store')->name('api.entries.store');
     });
 
 Route::controller(MembershipController::class)

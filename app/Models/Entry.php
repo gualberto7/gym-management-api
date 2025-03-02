@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Chenkis extends Model
+class Entry extends Model
 {
-    /** @use HasFactory<\Database\Factories\ChenkisFactory> */
+    /** @use HasFactory<\Database\Factories\EntryFactory> */
     use HasFactory;
 
     protected $fillable = [
