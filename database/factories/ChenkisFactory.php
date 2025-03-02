@@ -20,7 +20,7 @@ class ChenkisFactory extends Factory
         return [
             'member_id' => App\Models\Member::factory(),
             'gym_id' => App\Models\Gym::factory(),
-            'registred_by' => $this->faker->name(),
+            'created_by' => $this->faker->name(),
         ];
     }
 }

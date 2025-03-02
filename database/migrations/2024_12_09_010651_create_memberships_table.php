@@ -18,7 +18,9 @@ return new class extends Migration {
             $table->enum('duration_unit', ['day', 'week', 'month', 'year']);
             $table->integer('max_checkins')->nullable();
             $table->string('description')->nullable();
-            $table->foreignId('gym_id')->constrained()->onDelete('cascade');
+            $table->string('created_by');
+            $table->string('updated_by');
+            $table->foreignUuid('gym_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

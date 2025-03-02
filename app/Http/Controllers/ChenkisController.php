@@ -26,13 +26,13 @@ class ChenkisController extends Controller
         $request->validate([
             'member_id' => 'required',
             'gym_id' => 'required',
-            'registred_by' => 'required|string',
+            'created_by' => 'required|string',
         ]);
 
         $chenki = Chenkis::create([
             'member_id' => $request->member_id,
             'gym_id' => $request->gym_id,
-            'registred_by' => $request->registred_by,
+            'created_by' => $request->created_by,
         ]);
 
         return response()->json($chenki, 201);

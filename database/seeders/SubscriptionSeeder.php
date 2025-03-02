@@ -24,7 +24,9 @@ class SubscriptionSeeder extends Seeder
                 'start_date' => now(),
                 'end_date' => now()->addMonths(1),
                 'member_id' => $member->id,
-                'membership_id' => $membership->id
+                'membership_id' => $membership->id,
+                'created_by' => 'Seeder',
+                'updated_by' => 'Seeder',
             ]);
         });
     }

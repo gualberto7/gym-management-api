@@ -12,9 +12,9 @@ return new class extends Migration {
     {
         Schema::create('chenkis', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->constrained()->onDelete('cascade');
-            $table->foreignId('gym_id')->constrained()->onDelete('cascade');
-            $table->string('registred_by');
+            $table->foreignUuid('member_id')->constrained()->onDelete('cascade');
+            $table->foreignUuid('gym_id')->constrained()->onDelete('cascade');
+            $table->string('created_by');
             $table->timestamps();
         });
     }

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -9,9 +10,9 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 class Subscription extends Model
 {
     /** @use HasFactory<\Database\Factories\SubscriptionFactory> */
-    use HasFactory, AuthorizesRequests;
+    use HasFactory, AuthorizesRequests, HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = ['start_date', 'end_date', 'member_id', 'created_by', 'updated_by', 'membership_id', 'gym_id'];
 
     public function member()
     {

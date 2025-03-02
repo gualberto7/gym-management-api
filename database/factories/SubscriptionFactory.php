@@ -22,6 +22,8 @@ class SubscriptionFactory extends Factory
             'membership_id' => \App\Models\Membership::factory(),
             'member_id' => \App\Models\Member::factory(),
             'gym_id' => \App\Models\Gym::factory(),
+            'created_by' => $this->faker->name,
+            'updated_by' => $this->faker->name,
         ];
     }
 }

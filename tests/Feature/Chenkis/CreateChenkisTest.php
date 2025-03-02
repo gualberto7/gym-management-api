@@ -19,14 +19,14 @@ test('admins users can add chenkis', function () {
         ->postJson(route('api.chenkis.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
-            'registred_by' => $user->name,
+            'created_by' => $user->name,
         ]);
 
     $response->assertStatus(201);
     $this->assertDatabaseHas('chenkis', [
         'member_id' => $member->id,
         'gym_id' => $gym->id,
-        'registred_by' => $user->name,
+        'created_by' => $user->name,
     ]);
 });
 
@@ -39,14 +39,14 @@ test('owners users can add chenkis', function () {
         ->postJson(route('api.chenkis.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
-            'registred_by' => $user->name,
+            'created_by' => $user->name,
         ]);
 
     $response->assertStatus(201);
     $this->assertDatabaseHas('chenkis', [
         'member_id' => $member->id,
         'gym_id' => $gym->id,
-        'registred_by' => $user->name,
+        'created_by' => $user->name,
     ]);
 });
 
@@ -59,7 +59,7 @@ test('member_id is required', function () {
     $response = $this->actingAs($user)
         ->postJson(route('api.chenkis.store'), [
             'gym_id' => $gym->id,
-            'registred_by' => $user->name,
+            'created_by' => $user->name,
         ]);
 
     $response->assertStatus(422);
@@ -73,14 +73,14 @@ test('gym_id is required', function () {
     $response = $this->actingAs($user)
         ->postJson(route('api.chenkis.store'), [
             'member_id' => $member->id,
-            'registred_by' => $user->name,
+            'created_by' => $user->name,
         ]);
 
     $response->assertStatus(422);
     $response->assertJsonValidationErrors('gym_id');
 });
 
-test('registred_by is required', function () {
+test('created_by is required', function () {
     $user = User::factory()->create(['role' => 'admin']);
     $gym = Gym::factory()->create(['user_id' => $user->id]);
     $member = Member::factory()->create();
@@ -92,10 +92,10 @@ test('registred_by is required', function () {
         ]);
 
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors('registred_by');
+    $response->assertJsonValidationErrors('created_by');
 });
 
-test('registred_by must be string', function () {
+test('created_by must be string', function () {
     $user = User::factory()->create(['role' => 'admin']);
     $gym = Gym::factory()->create(['user_id' => $user->id]);
     $member = Member::factory()->create();
@@ -104,9 +104,9 @@ test('registred_by must be string', function () {
         ->postJson(route('api.chenkis.store'), [
             'member_id' => $member->id,
             'gym_id' => $gym->id,
-            'registred_by' => 123,
+            'created_by' => 123,
         ]);
 
     $response->assertStatus(422);
-    $response->assertJsonValidationErrors('registred_by');
+    $response->assertJsonValidationErrors('created_by');
 });

@@ -13,7 +13,7 @@ class Chenkis extends Model
     protected $fillable = [
         'member_id',
         'gym_id',
-        'registred_by',
+        'created_by',
     ];
 
     public function member()

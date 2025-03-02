@@ -3,31 +3,34 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Model;
 
 class Gym extends Model
 {
     /** @use HasFactory<\Database\Factories\GymFactory> */
-    use HasFactory;
+    use HasFactory, HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = ['name', 'address', 'phone', 'email', 'website', 'user_id'];
 
-    function user()
+    function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    function memberships()
+    function memberships(): HasMany
     {
         return $this->hasMany(Membership::class);
     }
 
-    function subscriptions()
+    function subscriptions(): HasMany
     {
         return $this->hasMany(Subscription::class);
     }
 
-    function chenkis()
+    function chenkis(): HasMany
     {
         return $this->hasMany(Chenkis::class);
     }

@@ -28,13 +28,13 @@ test('admin can subscribe members', function () {
     $data = $this->createUserGymMembership('admin');
     $member = Member::factory()->create();
 
-    $subscription = [
+    $subscription = Subscription::factory()->raw([
         'start_date' => now()->format('Y-m-d'),
         'end_date' => now()->addMonth()->format('Y-m-d'),
         'gym_id' => $data['gym']->id,
         'member_id' => $member->id,
         'membership_id' => $data['membership']->id,
-    ];
+    ]);
 
     $response = $this->actingAs($data['user'])
         ->postJson(route('api.subscribed-members.store'), $subscription);
@@ -46,13 +46,13 @@ test('owner can subscribe members', function () {
     $data = $this->createUserGymMembership('owner');
     $member = Member::factory()->create();
 
-    $subscription = [
+    $subscription = Subscription::factory()->raw([
         'start_date' => now()->format('Y-m-d'),
         'end_date' => now()->addMonth()->format('Y-m-d'),
         'gym_id' => $data['gym']->id,
         'member_id' => $member->id,
         'membership_id' => $data['membership']->id,
-    ];
+    ]);
 
     $response = $this->actingAs($data['user'])
         ->postJson(route('api.subscribed-members.store'), $subscription);
