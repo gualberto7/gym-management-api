@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\JsonApi\JsonApiQueryBuilder;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Auth\Notifications\ResetPassword;
@@ -27,5 +28,11 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Builder::mixin(new JsonApiQueryBuilder());
+
+        Gate::before(function ($user, $ability) {
+            if ($user->hasRole('super_admin')) {
+                return true;
+            }
+        });
     }
 }
