@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Roles;
 use App\Models\Gym;
 use App\Models\User;
 use App\Models\Membership;
 use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
@@ -19,10 +21,16 @@ class UserSeeder extends Seeder
             'email' => 'albert@test.com',
         ]);
 
-        User::factory()->create([
+        $user2 = User::factory()->create([
             'name' => 'Admin',
             'email' => 'admin@test.com',
         ]);
+
+        $ownerRole = Role::where('name', Roles::OWNER)->first();
+        $user1->assignRole($ownerRole);
+
+        $adminRole = Role::where('name', Roles::ADMIN)->first();
+        $user2->assignRole($adminRole);
 
         $gym = Gym::create([
             'name' => 'Gym 1',
@@ -49,6 +57,10 @@ class UserSeeder extends Seeder
             'duration_unit' => 'month',
             'description' => 'Membresia trimestral',
             'gym_id' => $gym->id,
+        ]);
+
+        $user2->update([
+            'assigned_gym' => $gym->id,
         ]);
     }
 }
