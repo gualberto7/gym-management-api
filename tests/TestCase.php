@@ -3,10 +3,11 @@
 namespace Tests;
 
 use App\Models\Gym;
-use App\Models\Subscription;
 use App\Models\User;
 use App\Models\Member;
 use App\Models\Membership;
+use App\Models\Subscription;
+use Spatie\Permission\Models\Role;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase

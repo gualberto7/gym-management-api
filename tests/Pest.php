@@ -1,5 +1,8 @@
 <?php
 
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 /*
 |--------------------------------------------------------------------------
 | Test Case
@@ -13,7 +16,10 @@
 
 pest()->extend(Tests\TestCase::class)
     ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature', 'Unit');
+    ->in('Feature', 'Unit')
+    ->beforeEach(function () {
+        $this->seed(\Database\Seeders\RolePermissionSeeder::class);
+    });
 
 /*
 |--------------------------------------------------------------------------
@@ -41,7 +47,8 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function addRole($user, $role)
 {
-    // ..
+    $role = Role::whereName($role)->first();
+    $user->assignRole($role);
 }

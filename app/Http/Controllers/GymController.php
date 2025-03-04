@@ -12,4 +12,17 @@ class GymController extends Controller
 
         return response()->json($gyms);
     }
+
+    public function store(Request $request)
+    {
+        $user = $request->user();
+
+//        if(!$user->can('create gyms')) {
+//            abort(403);
+//        }
+
+        $gym = $user->gyms()->create($request->all());
+
+        return response()->json($gym, 201);
+    }
 }
