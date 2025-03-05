@@ -56,8 +56,9 @@ test('admins can list only their assigned gym', function () {
 
 test('owners can list only their assigned gym', function () {
     $user = User::factory()->create();
-    $gym = Gym::factory()->create(['name' => 'test owner gym', 'user_id' => $user->id]);
-    $gym = Gym::factory()->create(['name' => 'test owner gym 2', 'user_id' => $user->id]);
+    Gym::factory()->create(['name' => 'test owner gym', 'user_id' => $user->id]);
+    Gym::factory()->create(['name' => 'test owner gym 2', 'user_id' => $user->id]);
+    Gym::factory()->create(['name' => 'test owner gym 2']);
     addRole($user, Roles::OWNER);
 
     $response = $this->actingAs($user)
