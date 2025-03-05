@@ -11,14 +11,17 @@ class GymController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        $gyms = [];
+        $query = Gym::query();
+
         if ($user->hasRole(Roles::OWNER)) {
-            $gyms = $user->gyms()->with('memberships')->get();
+            $query->where('user_id', $user->id);
         }
 
         if ($user->hasRole(Roles::ADMIN)) {
-            $gyms = Gym::whereId($user->assigned_gym)->get();
+            $query->where('id', $user->assigned_gym);
         }
+
+        $gyms = $query->with('memberships')->get();
 
         return response()->json($gyms);
     }
