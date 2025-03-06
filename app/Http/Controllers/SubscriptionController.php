@@ -23,7 +23,7 @@ class SubscriptionController extends Controller
         return SubscriptionResource::collection($subscriptions);
     }
 
-    public function show($ci)
+    public function show($gymId, $ci)
     {
         // TODO: Implement validation to find subscriptions only for the gym owner or admin
 
