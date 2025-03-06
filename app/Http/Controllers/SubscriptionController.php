@@ -12,9 +12,6 @@ class SubscriptionController extends Controller
 {
     public function index($gymId)
     {
-//        if (Gate::denies('viewAny', Subscription::class)) {
-//            abort(403);
-//        }
         if(!auth()->user()->allowedGym($gymId)) {
             abort(403);
         }
