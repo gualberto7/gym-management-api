@@ -17,8 +17,8 @@ class SubscriptionFactory extends Factory
     public function definition(): array
     {
         return [
-            'start_date' => $startDate = $this->faker->dateTimeBetween('now', '+1 day'),
-            'end_date' => $this->faker->dateTimeBetween($startDate, '+1 year'),
+            'start_date' => $startDate = $this->faker->dateTimeBetween('now', '+1 day')->format('Y-m-d'),
+            'end_date' => $this->faker->dateTimeBetween($startDate, '+1 year')->format('Y-m-d'),
             'membership_id' => \App\Models\Membership::factory(),
             'member_id' => \App\Models\Member::factory(),
             'gym_id' => \App\Models\Gym::factory(),

@@ -45,13 +45,23 @@ class SubscriptionController extends Controller
         return new SubscriptionResource($subscription);
     }
 
-    public function store(Request $request)
+    public function store($gymId, Request $request)
     {
-        if (Gate::denies('create', Subscription::class)) {
+        $user = auth()->user();
+
+        if(!$user->allowedGym($gymId)) {
             abort(403);
         }
 
-        $subscription = Subscription::create($request->all());
+        $subscription = Subscription::create([
+            'start_date' => $request->start_date,
+            'end_date' => $request->end_date,
+            'membership_id' => $request->membership_id,
+            'member_id' => $request->member_id,
+            'gym_id' => $gymId,
+            'created_by' => $user->name,
+            'updated_by' => $user->name,
+        ]);
 
         return new SubscriptionResource($subscription);
     }
