@@ -25,7 +25,9 @@ class SubscriptionController extends Controller
 
     public function show($gymId, $ci)
     {
-        // TODO: Implement validation to find subscriptions only for the gym owner or admin
+        if(!auth()->user()->allowedGym($gymId)) {
+            abort(403);
+        }
 
         $member = Member::where('ci', $ci)->first();
         if (!$member) {

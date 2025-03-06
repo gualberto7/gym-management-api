@@ -19,6 +19,16 @@ test('admins can find a subscription', function () {
     $response->assertStatus(200);
 });
 
+test('admins can find subscriptions only for their asugned gym', function () {
+    $data = createUserGymMembershipAndSubscription('admin');
+    $data2 = createUserGymMembershipAndSubscription('admin');
+
+    $response = $this->actingAs($data['user'])
+        ->getJson(route('api.subscriptions.show', ['gymId' => $data2['gym']->id, 'ci' => $data2['member']->ci]));
+
+    $response->assertStatus(403);
+});
+
 test('owners can find a subscription', function () {
     $data = createUserGymMembershipAndSubscription('owner');
 
@@ -26,6 +36,16 @@ test('owners can find a subscription', function () {
         ->getJson(route('api.subscriptions.show', ['gymId' => $data['gym']->id, 'ci' => $data['member']->ci]));
 
     $response->assertStatus(200);
+});
+
+test('owners can find subscriptions only for their gyms', function () {
+    $data = createUserGymMembershipAndSubscription('owner');
+    $data2 = createUserGymMembershipAndSubscription('owner');
+
+    $response = $this->actingAs($data['user'])
+        ->getJson(route('api.subscriptions.show', ['gymId' => $data2['gym']->id, 'ci' => $data2['member']->ci]));
+
+    $response->assertStatus(403);
 });
 
 test('verify the response structure when finding a subscription', function () {
