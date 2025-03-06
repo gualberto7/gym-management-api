@@ -39,4 +39,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(Gym::class);
     }
+
+    public function allowedGym($gymId)
+    {
+        if($this->hasRole('owner')) {
+            $gyms = $this->gyms->pluck('id')->toArray();
+            if (!in_array($gymId, $gyms)) {
+                return false;
+            }
+        }
+        if($this->hasRole('admin')) {
+            if($this->assigned_gym != $gymId) {
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -1,41 +1,61 @@
 <?php
 
+use App\Models\Gym;
+
 test('guest users cannot request subscribed members', function () {
-    $response = $this->getJson(route('api.subscribed-members.index'));
+    $response = $this->getJson(route('api.subscriptions.index', '1'));
 
     $response->assertStatus(401);
 });
 
 test('role user cannot request subscribed members', function () {
-    $data = $this->createUserGymMembershipAndSubscription();
+    $data = createUserGymMembershipAndSubscription();
 
     $this->actingAs($data['user'])
-        ->getJson(route('api.subscribed-members.index'))
+        ->getJson(route('api.subscriptions.index', $data['gym']->id))
         ->assertStatus(403);
 });
 
 test('admin can request subscribed members', function () {
-    $data = $this->createUserGymMembershipAndSubscription('admin');
+    $data = createUserGymMembershipAndSubscription('admin');
 
     $this->actingAs($data['user'])
-        ->getJson(route('api.subscribed-members.index'))
+        ->getJson(route('api.subscriptions.index', $data['gym']->id))
         ->assertStatus(200);
 
+});
+
+test('admins can request subscription only of their assigned gym', function () {
+    $data = createUserGymMembershipAndSubscription('admin');
+    $gym = Gym::factory()->create();
+
+    $this->actingAs($data['user'])
+        ->getJson(route('api.subscriptions.index', $gym->id))
+        ->assertStatus(403);
 });
 
 test('owner can request subscribed members', function () {
-    $data = $this->createUserGymMembershipAndSubscription('owner');
+    $data = createUserGymMembershipAndSubscription('owner');
 
     $this->actingAs($data['user'])
-        ->getJson(route('api.subscribed-members.index'))
+        ->getJson(route('api.subscriptions.index', $data['gym']->id))
         ->assertStatus(200);
 });
 
+test('owners can request subscription only of their gym', function () {
+    $data = createUserGymMembershipAndSubscription('owner');
+    $gym = Gym::factory()->create();
+
+    $this->actingAs($data['user'])
+        ->getJson(route('api.subscriptions.index', $gym->id))
+        ->assertStatus(403);
+});
+
 test('verify response structure when requesting subscribed members', function () {
-    $data = $this->createUserGymMembershipAndSubscription('owner');
+    $data = createUserGymMembershipAndSubscription('owner');
 
     $response = $this->actingAs($data['user'])
-        ->getJson(route('api.subscribed-members.index'));
+        ->getJson(route('api.subscriptions.index', $data['gym']->id));
 
     $response->assertJsonStructure([
         'data' => [
@@ -59,10 +79,10 @@ test('verify response structure when requesting subscribed members', function ()
 });
 
 test('verify subscription members is paginated', function () {
-    $data = $this->createUserGymMembershipAndSubscription('owner');
+    $data = createUserGymMembershipAndSubscription('owner');
 
     $response = $this->actingAs($data['user'])
-        ->getJson(route('api.subscribed-members.index'));
+        ->getJson(route('api.subscriptions.index', $data['gym']->id));
 
     $response->assertStatus(200);
     $response->assertJsonStructure([

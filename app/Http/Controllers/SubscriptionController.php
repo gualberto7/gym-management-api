@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\SubscriptionResource;
 use App\Models\Member;
 use App\Models\Subscription;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\SubscriptionResource;
 
-class SubscribedMemberController extends Controller
+class SubscriptionController extends Controller
 {
-    public function index()
+    public function index($gymId)
     {
-        if (Gate::denies('viewAny', Subscription::class)) {
+//        if (Gate::denies('viewAny', Subscription::class)) {
+//            abort(403);
+//        }
+        if(!auth()->user()->allowedGym($gymId)) {
             abort(403);
         }
 
-        $gym = auth()->user()->gyms->first();
-
         $subscriptions = Subscription::with(['member', 'membership'])
-            ->where('gym_id', $gym->id)
+            ->where('gym_id', $gymId)
             ->jsonPaginate();
 
         return SubscriptionResource::collection($subscriptions);

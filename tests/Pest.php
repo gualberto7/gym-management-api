@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\Gym;
+use App\Models\User;
+use App\Models\Member;
+use App\Models\Membership;
+use App\Models\Subscription;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 
@@ -51,4 +56,31 @@ function addRole($user, $role)
 {
     $role = Role::whereName($role)->first();
     $user->assignRole($role);
+}
+
+function createUserGymMembership($role = 'user')
+{
+    $user = User::factory()->create();
+    addRole($user, $role);
+    $gym = Gym::factory()->create(['user_id' => $user->id]);
+    $membership = Membership::factory()->create(['gym_id' => $gym->id]);
+
+    if($role === 'admin') {
+        $user->update(['assigned_gym' => $gym->id]);
+    }
+
+    return compact('user', 'gym', 'membership');
+}
+
+function createUserGymMembershipAndSubscription($role = 'user')
+{
+    $data = createUserGymMembership($role);
+    $member = Member::factory()->create();
+    $subscription = Subscription::factory()->create([
+        'gym_id' => $data['gym']->id,
+        'member_id' => $member->id,
+        'membership_id' => $data['membership']->id,
+    ]);
+
+    return array_merge($data, compact('member', 'subscription'));
 }
