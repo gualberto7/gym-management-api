@@ -3,13 +3,15 @@
 use App\Models\Member;
 
 test('guests users cannot find subscriptions', function () {
-    $response = $this->getJson(route('api.subscriptions.show', ['gymId' => '2','ci' => '123456']));
+    $data = createUserGymMembershipAndSubscription();
+    $response = $this->actingAs($data['user'])
+        ->getJson(route('api.subscriptions.show', ['gymId' => $data['gym']->id, 'ci' => $data['member']->ci]));
 
-    $response->assertStatus(401);
+    $response->assertStatus(403);
 });
 
 test('admins can find a subscription', function () {
-    $data = $this->createUserGymMembershipAndSubscription('admin');
+    $data = createUserGymMembershipAndSubscription('admin');
 
     $response = $this->actingAs($data['user'])
         ->getJson(route('api.subscriptions.show', ['gymId' => $data['gym']->id, 'ci' => $data['member']->ci]));
@@ -18,7 +20,7 @@ test('admins can find a subscription', function () {
 });
 
 test('owners can find a subscription', function () {
-    $data = $this->createUserGymMembershipAndSubscription('admin');
+    $data = createUserGymMembershipAndSubscription('owner');
 
     $response = $this->actingAs($data['user'])
         ->getJson(route('api.subscriptions.show', ['gymId' => $data['gym']->id, 'ci' => $data['member']->ci]));
@@ -27,7 +29,7 @@ test('owners can find a subscription', function () {
 });
 
 test('verify the response structure when finding a subscription', function () {
-    $data = $this->createUserGymMembershipAndSubscription('admin');
+    $data = createUserGymMembershipAndSubscription('admin');
 
     $response = $this->actingAs($data['user'])
         ->getJson(route('api.subscriptions.show', ['gymId' => $data['gym']->id, 'ci' => $data['member']->ci]));
@@ -52,7 +54,7 @@ test('verify the response structure when finding a subscription', function () {
 });
 
 test('it fails if the member does not exist', function () {
-    $data = $this->createUserGymMembershipAndSubscription('admin');
+    $data = createUserGymMembershipAndSubscription('admin');
 
     $response = $this->actingAs($data['user'])
         ->getJson(route('api.subscriptions.show', ['gymId' => $data['gym']->id, 'ci' => '123456']));
@@ -62,7 +64,7 @@ test('it fails if the member does not exist', function () {
 });
 
 test('it fails if the member does not have a subscrition', function () {
-    $data = $this->createUserGymMembership('admin');
+    $data = createUserGymMembership('admin');
     $member = Member::factory()->create();
 
     $response = $this->actingAs($data['user'])

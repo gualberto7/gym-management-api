@@ -11,7 +11,7 @@ Route::controller(App\Http\Controllers\SubscriptionController::class)
     ->middleware('auth:sanctum')
     ->group(function () {
         Route::get('/subscriptions/{gymId}', 'index')->name('api.subscriptions.index')->middleware('role:admin|owner');
-        Route::get('/subscriptions/{gymId}/ci/{ci}', 'show')->name('api.subscriptions.show');
+        Route::get('/subscriptions/{gymId}/ci/{ci}', 'show')->name('api.subscriptions.show')->middleware('role:admin|owner');
         Route::post('/subscribed-members', 'store')->name('api.subscribed-members.store');
     });
 
