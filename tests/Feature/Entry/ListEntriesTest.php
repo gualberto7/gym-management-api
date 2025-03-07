@@ -6,51 +6,53 @@ use App\Models\User;
 use App\Models\Member;
 
 test('guest users cannot list entries', function () {
-    $response = $this->getJson(route('api.entries.index'));
+    $response = $this->getJson(route('api.entries.index', 123));
 
     $response->assertStatus(401);
 });
 
-test('admins can list entries of their members', function () {
-    $user = User::factory()->create(['role' => 'admin']);
-    Gym::factory()->create(['user_id' => $user->id]);
+test('users cannot list entries', function () {
+    $user = User::factory()->create();
 
     $response = $this->actingAs($user)
-        ->getJson(route('api.entries.index'));
+        ->getJson(route('api.entries.index', 123));
 
-    $response->assertStatus(200);
+    $response->assertStatus(403);
+});
+
+test('admins can list entries of their assigned gym', function () {
+    $data = createUserGymMembershipAndSubscription('admin');
+    Entry::factory(2)->create(['gym_id' => $data['gym']->id]);
+
+    $this->actingAs($data['user'])
+        ->getJson(route('api.entries.index', $data['gym']->id))
+        ->assertStatus(200);
+
+    $gym = Gym::factory()->create();
+    $this->actingAs($data['user'])
+        ->getJson(route('api.entries.index', $gym->id))
+        ->assertStatus(403);
 });
 
 test('owners can list entries of their members', function () {
-    $user = User::factory()->create(['role' => 'owner']);
-    Gym::factory()->create(['user_id' => $user->id]);
+    $data = createUserGymMembershipAndSubscription('owner');
 
-    $response = $this->actingAs($user)
-        ->getJson(route('api.entries.index'));
+    $this->actingAs($data['user'])
+        ->getJson(route('api.entries.index', $data['gym']->id))
+        ->assertStatus(200);
 
-    $response->assertStatus(200);
-});
-
-test("verify entries belongs to owner's / admins gyms", function () {
-    $data = $this->createUserGymMembershipAndSubscription('owner');
-    Entry::factory()->create(['gym_id' => $data['gym']->id, 'member_id' => $data['member']->id]);
-
-    $data1 = $this->createUserGymMembershipAndSubscription('owner');
-    Entry::factory()->create(['gym_id' => $data1['gym']->id, 'member_id' => $data1['member']->id]);
-
-    $response = $this->actingAs($data['user'])
-        ->getJson(route('api.entries.index'));
-
-    $response->assertStatus(200);
-    $response->assertJsonCount(1, 'data');
+    $gym = Gym::factory()->create();
+    $this->actingAs($data['user'])
+        ->getJson(route('api.entries.index', $gym->id))
+        ->assertStatus(403);
 });
 
 test('verify entries response data structure', function () {
-    $data = $this->createUserGymMembershipAndSubscription('owner');
+    $data = createUserGymMembershipAndSubscription('owner');
     Entry::factory()->create(['gym_id' => $data['gym']->id, 'member_id' => $data['member']->id]);
 
     $response = $this->actingAs($data['user'])
-        ->getJson(route('api.entries.index'));
+        ->getJson(route('api.entries.index', $data['gym']->id));
 
     $response->assertJsonStructure([
         'data' => [

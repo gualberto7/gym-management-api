@@ -4,14 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\EntryResource;
 use App\Models\Entry;
+use App\Models\Gym;
 use Illuminate\Http\Request;
 
 class EntryController extends Controller
 {
 
-    public function index()
+    public function index($gymId)
     {
-        $gym = auth()->user()->gyms->first();
+        if(!auth()->user()->allowedGym($gymId)) {
+            abort(403);
+        }
+
+        $gym = Gym::findOrFail($gymId);
 
         if (!$gym) {
             return response()->json(['error' => 'No gym associated with the user'], 404);

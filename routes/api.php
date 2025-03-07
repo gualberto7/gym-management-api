@@ -20,7 +20,7 @@ Route::controller(App\Http\Controllers\MemberController::class)->middleware('aut
     });
 
 Route::controller(App\Http\Controllers\EntryController::class)->middleware('auth:sanctum')->group(function () {
-        Route::get('/entries', 'index')->name('api.entries.index');
+        Route::get('/entries/{gymId}', 'index')->name('api.entries.index')->middleware('role:admin|owner');;
         Route::post('/entries', 'store')->name('api.entries.store');
     });
 

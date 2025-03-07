@@ -62,12 +62,13 @@ function createUserGymMembership($role = 'user')
 {
     $user = User::factory()->create();
     addRole($user, $role);
-    $gym = Gym::factory()->create(['user_id' => $user->id]);
-    $membership = Membership::factory()->create(['gym_id' => $gym->id]);
+
+    $gym = $role === 'admin' ? Gym::factory()->create() : Gym::factory()->create(['user_id' => $user->id]);
 
     if($role === 'admin') {
         $user->update(['assigned_gym' => $gym->id]);
     }
+    $membership = Membership::factory()->create(['gym_id' => $gym->id]);
 
     return compact('user', 'gym', 'membership');
 }
