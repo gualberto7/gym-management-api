@@ -26,18 +26,20 @@ class EntryController extends Controller
         return EntryResource::collection($entries);
     }
 
-    public function store(Request $request)
+    public function store($gymId, Request $request)
     {
+        if(!auth()->user()->allowedGym($gymId)) {
+            abort(403);
+        }
+
         $request->validate([
             'member_id' => 'required',
-            'gym_id' => 'required',
-            'created_by' => 'required|string',
         ]);
 
         $entry = Entry::create([
             'member_id' => $request->member_id,
-            'gym_id' => $request->gym_id,
-            'created_by' => $request->created_by,
+            'gym_id' => $gymId,
+            'created_by' => auth()->user()->name,
         ]);
 
         return response()->json($entry, 201);
