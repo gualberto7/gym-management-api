@@ -8,9 +8,9 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
 })->name(('api.user.find'));
 
 Route::controller(App\Http\Controllers\SubscriptionController::class)->middleware('auth:sanctum')->group(function () {
-        Route::get('/subscriptions/{gymId}', 'index')->name('api.subscriptions.index')->middleware('role:admin|owner');
-        Route::get('/subscriptions/{gymId}/ci/{ci}', 'show')->name('api.subscriptions.show')->middleware('role:admin|owner');
-        Route::post('/subscriptions/{gymId}', 'store')->name('api.subscriptions.store')->middleware('role:admin|owner');
+        Route::get('/gym/{gymId}/subscriptions', 'index')->name('api.subscriptions.index')->middleware('role:admin|owner');
+        Route::get('/gym/{gymId}/subscriptions/member/{ci}', 'show')->name('api.subscriptions.show')->middleware('role:admin|owner');
+        Route::post('/gym/{gymId}/subscriptions', 'store')->name('api.subscriptions.store')->middleware('role:admin|owner');
     });
 
 Route::controller(App\Http\Controllers\MemberController::class)->middleware('auth:sanctum')->group(function () {
@@ -20,8 +20,8 @@ Route::controller(App\Http\Controllers\MemberController::class)->middleware('aut
     });
 
 Route::controller(App\Http\Controllers\EntryController::class)->middleware('auth:sanctum')->group(function () {
-        Route::get('/entries/{gymId}', 'index')->name('api.entries.index')->middleware('role:admin|owner');;
-        Route::post('/entries/{gymId}', 'store')->name('api.entries.store')->middleware('role:admin|owner');
+        Route::get('/gym/{gymId}/entries', 'index')->name('api.entries.index')->middleware('role:admin|owner');;
+        Route::post('/gym/{gymId}/entries', 'store')->name('api.entries.store')->middleware('role:admin|owner');
     });
 
 Route::controller(App\Http\Controllers\MembershipController::class)->middleware('auth:sanctum')->group(function () {
