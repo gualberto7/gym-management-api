@@ -18,6 +18,7 @@ class SubscriptionController extends Controller
 
         $subscriptions = Subscription::with(['member', 'membership'])
             ->where('gym_id', $gymId)
+            ->applyFilters(['member.name', 'start_date', 'end_date'])
             ->jsonPaginate();
 
         return SubscriptionResource::collection($subscriptions);

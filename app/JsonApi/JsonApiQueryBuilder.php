@@ -36,9 +36,16 @@ class JsonApiQueryBuilder
             foreach (request('filter', []) as $filter => $value) {
                 abort_unless(in_array($filter, $allowedFilters), 400, 'Invalid filter field');
 
-                $this->hasNamedScope($filter)
-                    ? $this->{$filter}($value)
-                    : $this->where($filter, 'LIKE', "%$value%");
+                if (Str::contains($filter, '.')) {
+                    [$relation, $relationFilter] = explode('.', $filter);
+                    $this->whereHas($relation, function ($query) use ($relationFilter, $value) {
+                        $query->where($relationFilter, 'LIKE', "%$value%");
+                    });
+                } else {
+                    $this->hasNamedScope($filter)
+                        ? $this->{$filter}($value)
+                        : $this->where($filter, 'LIKE', "%$value%");
+                }
             }
             return $this;
         };
