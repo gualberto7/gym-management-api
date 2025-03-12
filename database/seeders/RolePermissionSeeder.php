@@ -24,11 +24,14 @@ class RolePermissionSeeder extends Seeder
 
         Permission::create(['name' => 'create gyms']);
         Permission::create(['name' => 'create memberships']);
+        Permission::create(['name' => 'update memberships']);
 
         $owner->givePermissionTo('create gyms');
         $owner->givePermissionTo('create memberships');
+        $owner->givePermissionTo('update memberships');
 
         $superAdmin->givePermissionTo('create gyms');
         $superAdmin->givePermissionTo('create memberships');
+        $superAdmin->givePermissionTo('update memberships');
     }
 }

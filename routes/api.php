@@ -28,6 +28,8 @@ Route::controller(App\Http\Controllers\MembershipController::class)->middleware(
         Route::get('/gym/{gymId}/memberships', 'index')->name('api.memberships.index')->middleware('role:admin|owner');
         Route::post('/gym/{gymId}/memberships', 'store')->name('api.memberships.store')
             ->middleware('role_or_permission:create memberships');
+    Route::put('/gym/{gymId}/memberships/{membership}', 'update')->name('api.memberships.update')
+        ->middleware('role_or_permission:update memberships');
     });
 
 Route::controller(App\Http\Controllers\GymController::class)->middleware('auth:sanctum')->group(function () {
