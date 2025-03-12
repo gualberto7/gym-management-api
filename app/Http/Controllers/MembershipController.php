@@ -18,8 +18,12 @@ class MembershipController extends Controller
         return response()->json($gym->memberships);
     }
 
-    public function store(Request $request)
+    public function store($gymId, Request $request)
     {
+        if(!auth()->user()->allowedGym($gymId)) {
+            abort(403);
+        }
+
         $membership = Membership::create($request->all());
         return response()->json($membership, 201);
     }

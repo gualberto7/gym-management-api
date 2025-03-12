@@ -23,8 +23,12 @@ class RolePermissionSeeder extends Seeder
         $superAdmin = Role::create(['name' => Roles::SUPER_ADMIN]);
 
         Permission::create(['name' => 'create gyms']);
+        Permission::create(['name' => 'create memberships']);
 
         $owner->givePermissionTo('create gyms');
+        $owner->givePermissionTo('create memberships');
+
         $superAdmin->givePermissionTo('create gyms');
+        $superAdmin->givePermissionTo('create memberships');
     }
 }

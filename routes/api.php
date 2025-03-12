@@ -26,7 +26,8 @@ Route::controller(App\Http\Controllers\EntryController::class)->middleware('auth
 
 Route::controller(App\Http\Controllers\MembershipController::class)->middleware('auth:sanctum')->group(function () {
         Route::get('/gym/{gymId}/memberships', 'index')->name('api.memberships.index')->middleware('role:admin|owner');
-        Route::post('/memberships', 'store')->name('api.memberships.store');
+        Route::post('/gym/{gymId}/memberships', 'store')->name('api.memberships.store')
+            ->middleware('role_or_permission:create memberships');
     });
 
 Route::controller(App\Http\Controllers\GymController::class)->middleware('auth:sanctum')->group(function () {
