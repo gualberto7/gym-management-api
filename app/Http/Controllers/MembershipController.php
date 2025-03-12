@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Gym;
 use App\Models\Membership;
 use Illuminate\Http\Request;
 
 class MembershipController extends Controller
 {
-    public function index()
+    public function index($gymId)
     {
-        $memberships = Membership::all();
-        return response()->json($memberships);
+        if(!auth()->user()->allowedGym($gymId)) {
+            abort(403);
+        }
+
+        $gym = Gym::findOrFail($gymId);
+        return response()->json($gym->memberships);
     }
 
     public function store(Request $request)

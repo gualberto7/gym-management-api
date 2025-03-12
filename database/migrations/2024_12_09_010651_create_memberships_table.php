@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('description')->nullable();
             $table->string('created_by');
             $table->string('updated_by');
+            $table->boolean('active')->default(true);
             $table->foreignUuid('gym_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
