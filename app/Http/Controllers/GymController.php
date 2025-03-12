@@ -34,4 +34,11 @@ class GymController extends Controller
 
         return response()->json($gym, 201);
     }
+
+    public function update(Gym $gym, Request $request)
+    {
+        $gym->update($request->all());
+
+        return response()->json($gym, 200);
+    }
 }
