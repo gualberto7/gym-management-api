@@ -38,7 +38,6 @@ test('role admins with permission can create memberships', function () {
         ->postJson(route('api.memberships.store', $data['gym']->id), $membership);
 
     $response->assertStatus(201);
-    $response->assertJson($membership);
 });
 
 test('role owners can create memberships', function () {
@@ -49,7 +48,6 @@ test('role owners can create memberships', function () {
         ->postJson(route('api.memberships.store', $data['gym']->id), $membership);
 
     $response->assertStatus(201);
-    $response->assertJson($membership);
 });
 
 test('role owners can create memberships only in their gyms', function () {

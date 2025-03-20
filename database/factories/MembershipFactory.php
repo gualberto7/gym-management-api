@@ -23,6 +23,7 @@ class MembershipFactory extends Factory
             'duration_unit' => $this->faker->randomElement(['day', 'week', 'month', 'year']),
             'description' => $this->faker->sentence,
             'gym_id' => \App\Models\Gym::factory(),
+            'active' => true,
             'created_by' => $this->faker->name,
             'updated_by' => $this->faker->name,
         ];
