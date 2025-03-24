@@ -7,6 +7,10 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 })->name(('api.user.find'));
 
+Route::controller(App\Http\Controllers\UserController::class)->middleware('auth:sanctum')->group(function () {
+    Route::get('/me', 'index');
+});
+
 Route::controller(App\Http\Controllers\SubscriptionController::class)->middleware('auth:sanctum')->group(function () {
         Route::get('/gym/{gymId}/subscriptions', 'index')->name('api.subscriptions.index')->middleware('role:admin|owner');
         Route::get('/gym/{gymId}/subscriptions/member/{ci}', 'show')->name('api.subscriptions.show')->middleware('role:admin|owner');
