@@ -63,6 +63,7 @@ test('verify response structure when requesting subscribed members', function ()
                 'id',
                 'start_date',
                 'end_date',
+                'status',
                 'member' => [
                     'id',
                     'name',

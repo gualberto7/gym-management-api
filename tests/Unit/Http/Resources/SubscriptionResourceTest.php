@@ -4,7 +4,7 @@ use App\Models\Subscription;
 use App\Http\Resources\SubscriptionResource;
 
 test('susbcription resource returns valid formatted data', function () {
-    $subscription = Subscription::factory()->create();
+    $subscription = Subscription::factory()->create(['end_date' => now()->subDays(5)]);
 
     $resource = new SubscriptionResource($subscription);
 

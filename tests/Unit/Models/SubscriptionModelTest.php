@@ -19,3 +19,14 @@ test('subscription belongs to a membership', function () {
     $subscription = Subscription::factory()->create();
     $this->assertInstanceOf(Membership::class, $subscription->membership);
 });
+
+test('it should return the correct status', function () {
+    $subscription = Subscription::factory()->create(['end_date' => now()->subDays(5)]);
+    $this->assertEquals('active', $subscription->getStatus());
+
+    $subscription = Subscription::factory()->create(['end_date' => now()->subDays(2)]);
+    $this->assertEquals('upcoming', $subscription->getStatus());
+
+    $subscription = Subscription::factory()->create(['end_date' => now()->addDays(1)]);
+    $this->assertEquals('expired', $subscription->getStatus());
+});

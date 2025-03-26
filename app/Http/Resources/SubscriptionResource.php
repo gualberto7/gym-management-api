@@ -18,6 +18,7 @@ class SubscriptionResource extends JsonResource
             'id' => $this->id,
             'start_date' => $this->start_date,
             'end_date' => $this->end_date,
+            'status' => $this->getStatus(),
             'member' => [
                 'id' => $this->member->id,
                 'name' => $this->member->name,
